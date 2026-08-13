@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLP Management Hub - Role-Based Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #0f766e;
+            --danger-color: #dc2626;
+            --warning-color: #f59e0b;
+            --success-color: #10b981;
+            --bg-dark: #0f172a;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1e3a8a 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1e3a8a 100%);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-container.show {
+            display: flex;
+        }
+
+        .login-box {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .login-box h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 28px;
+        }
+
+        .login-box p {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .role-button {
+            padding: 16px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: var(--text-dark);
+        }
+
+        .role-button:hover {
+            border-color: var(--primary-color);
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .role-button.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .login-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .login-submit:hover {
+            background: #1e3a8a;
+        }
+
+        /* Main Layout */
+        .container {
+            display: none;
+        }
+
+        .container.show {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--bg-dark);
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .user-info .role {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 6px;
+            display: block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: auto;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: var(--text-dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            padding: 10px 16px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #1e3a8a;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--danger-color);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        .stat-card.success {
+            border-left-color: var(--success-color);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: var(--success-color);
+        }
+
+        .stat-change.negative {
+            color: var(--danger-color);
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid var(--border-color);
+            background: var(--bg-light);
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        tr:hover {
+            background: var(--bg-light);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-offline {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-in-progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .connection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .connection-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .connection-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
+        }
+
+        .connection-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .connection-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .connection-status {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.online {
+            background: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: var(--danger-color);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .two-column-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .connection-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container show" id="loginContainer">
+        <div class="login-box">
+            <div class="logo" style="justify-content: center; margin-bottom: 30px;">
+                <div class="logo-icon">🔒</div>
+                <div>DLP Hub</div>
+            </div>
+            <h1>DLP Management Hub</h1>
+            <p>Role-Based Access Portal</p>
+
+            <div class="role-grid">
+                <button class="role-button active" onclick="selectRole('admin')">
+                    👨‍💼 Administrator
+                </button>
+                <button class="role-button" onclick="selectRole('analyst')">
+                    📊 Analyst
+                </button>
+                <button class="role-button" onclick="selectRole('executive')">
+                    👔 Executive
+                </button>
+            </div>
+
+            <button class="login-submit" onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🔒</div>
+                <div>DLP Hub</div>
+            </div>
+
+            <div class="user-info">
+                <div id="userName">Admin User</div>
+                <div class="role" id="userRole">Administrator</div>
+            </div>
+
+            <ul class="nav-menu" id="navMenu">
+                <!-- Admin Menu -->
+                <div style="padding: 8px 0; font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">ADMINISTRATOR</div>
+                <div id="adminMenu">
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('admin-overview')">📊 Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('admin-connections')">🔌 Tool Connections</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('admin-health')">❤️ System Health</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('admin-logs')">📝 Activity Logs</a>
+                    </li>
+                </div>
+
+                <!-- Analyst Menu -->
+                <div style="padding: 16px 0 8px 0; margin-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">ANALYST</div>
+                <div id="analystMenu">
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('analyst-overview')">📊 Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('analyst-alerts')">🚨 Active Alerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('analyst-remediation')">🔧 Remediation Queue</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('analyst-stats')">📈 Performance Stats</a>
+                    </li>
+                </div>
+
+                <!-- Executive Menu -->
+                <div style="padding: 16px 0 8px 0; margin-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">EXECUTIVE</div>
+                <div id="executiveMenu">
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('exec-overview')">📊 Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('exec-trends')">📈 Trends & Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="showSection('exec-reports')">📋 Compliance Reports</a>
+                    </li>
+                </div>
+            </ul>
+
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- ADMIN DASHBOARD -->
+            <div id="admin-overview" class="section active">
+                <div class="header">
+                    <h1>Administration Dashboard</h1>
+                    <div class="header-actions">
+                        <button class="btn-primary" onclick="refreshDashboard()">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Connected Tools</div>
+                        <div class="stat-value">6</div>
+                        <div class="stat-change">All systems operational</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-label">Sync Issues</div>
+                        <div class="stat-value">2</div>
+                        <div class="stat-change negative">Email connector pending</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">System Uptime</div>
+                        <div class="stat-value">99.8%</div>
+                        <div class="stat-change">↑ 0.2% this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Data Sync Lag</div>
+                        <div class="stat-value">2.3s</div>
+                        <div class="stat-change">↓ 0.5s improvement</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">System Performance (Last 24 Hours)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="adminPerformanceChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Tool Connection Status</div>
+                    <div class="chart-wrapper">
+                        <canvas id="adminConnectionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN CONNECTIONS -->
+            <div id="admin-connections" class="section">
+                <div class="header">
+                    <h1>DLP Tool Connections</h1>
+                </div>
+
+                <div class="connection-grid">
+                    <div class="connection-card">
+                        <div class="connection-icon">💻</div>
+                        <div class="connection-name">Endpoint DLP</div>
+                        <div class="connection-status">
+                            <span class="status-dot online"></span> Connected
+                        </div>
+                    </div>
+                    <div class="connection-card">
+                        <div class="connection-icon">🌐</div>
+                        <div class="connection-name">Network Monitor</div>
+                        <div class="connection-status">
+                            <span class="status-dot online"></span> Connected
+                        </div>
+                    </div>
+                    <div class="connection-card">
+                        <div class="connection-icon">📧</div>
+                        <div class="connection-name">Email Gateway</div>
+                        <div class="connection-status">
+                            <span class="status-dot offline"></span> Reconnecting
+                        </div>
+                    </div>
+                    <div class="connection-card">
+                        <div class="connection-icon">☁️</div>
+                        <div class="connection-name">Purview (O365)</div>
+                        <div class="connection-status">
+                            <span class="status-dot online"></span> Connected
+                        </div>
+                    </div>
+                    <div class="connection-card">
+                        <div class="connection-icon">🎫</div>
+                        <div class="connection-name">Ticketing System</div>
+                        <div class="connection-status">
+                            <span class="status-dot online"></span> Connected
+                        </div>
+                    </div>
+                    <div class="connection-card">
+                        <div class="connection-icon">📊</div>
+                        <div class="connection-name">SIEM Integration</div>
+                        <div class="connection-status">
+                            <span class="status-dot online"></span> Connected
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-title">Connection Details</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tool</th>
+                                <th>Status</th>
+                                <th>Last Sync</th>
+                                <th>Data Points</th>
+                                <th>Latency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Endpoint DLP</td>
+                                <td><span class="status-badge status-active">Online</span></td>
+                                <td>2 seconds ago</td>
+                                <td>45,230</td>
+                                <td>1.2ms</td>
+                            </tr>
+                            <tr>
+                                <td>Network Monitor</td>
+                                <td><span class="status-badge status-active">Online</span></td>
+                                <td>1 second ago</td>
+                                <td>28,945</td>
+                                <td>0.8ms</td>
+                            </tr>
+                            <tr>
+                                <td>Email Gateway</td>
+                                <td><span class="status-badge status-pending">Reconnecting</span></td>
+                                <td>45 seconds ago</td>
+                                <td>12,340</td>
+                                <td>5.3ms</td>
+                            </tr>
+                            <tr>
+                                <td>Purview (O365)</td>
+                                <td><span class="status-badge status-active">Online</span></td>
+                                <td>3 seconds ago</td>
+                                <td>67,123</td>
+                                <td>2.1ms</td>
+                            </tr>
+                            <tr>
+                                <td>Ticketing System</td>
+                                <td><span class="status-badge status-active">Online</span></td>
+                                <td>5 seconds ago</td>
+                                <td>8,456</td>
+                                <td>1.9ms</td>
+                            </tr>
+                            <tr>
+                                <td>SIEM Integration</td>
+                                <td><span class="status-badge status-active">Online</span></td>
+                                <td>1 second ago</td>
+                                <td>156,789</td>
+                                <td>3.4ms</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ADMIN HEALTH -->
+            <div id="admin-health" class="section">
+                <div class="header">
+                    <h1>System Health</h1>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Avg Response Time</div>
+                        <div class="stat-value">245ms</div>
+                        <div class="stat-change">↓ 15ms vs yesterday</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Error Rate</div>
+                        <div class="stat-value">0.02%</div>
+                        <div class="stat-change">↓ 0.01% improvement</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Data Processed</div>
+                        <div class="stat-value">2.3M</div>
+                        <div class="stat-change">↑ 150K since yesterday</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Active Sessions</div>
+                        <div class="stat-value">187</div>
+                        <div class="stat-change">↑ 23 concurrent users</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Error Rate Trend (7 Days)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="adminHealthChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN LOGS -->
+            <div id="admin-logs" class="section">
+                <div class="header">
+                    <h1>Activity Logs</h1>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-title">Recent System Events</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Event Type</th>
+                                <th>Source</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-08-13 14:32:15</td>
+                                <td>Connection Sync</td>
+                                <td>Endpoint DLP</td>
+                                <td>Synced 1,245 new alerts</td>
+                                <td><span class="status-badge status-completed">Success</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-08-13 14:30:42</td>
+                                <td>Connection Error</td>
+                                <td>Email Gateway</td>
+                                <td>Timeout during connection attempt</td>
+                                <td><span class="status-badge status-pending">Retrying</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-08-13 14:28:09</td>
+                                <td>Data Export</td>
+                                <td>Purview (O365)</td>
+                                <td>Exported 523 compliance records</td>
+                                <td><span class="status-badge status-completed">Success</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-08-13 14:25:33</td>
+                                <td>Ticket Creation</td>
+                                <td>Ticketing System</td>
+                                <td>Created 12 remediation tickets</td>
+                                <td><span class="status-badge status-completed">Success</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-08-13 14:20:15</td>
+                                <td>System Alert</td>
+                                <td>SIEM Integration</td>
+                                <td>High volume alert (98,432 events)</td>
+                                <td><span class="status-badge status-in-progress">Processed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ANALYST DASHBOARD -->
+            <div id="analyst-overview" class="section">
+                <div class="header">
+                    <h1>Analyst Dashboard</h1>
+                    <div class="header-actions">
+                        <button class="btn-primary" onclick="refreshDashboard()">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card danger">
+                        <div class="stat-label">Active Alerts</div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-change negative">↑ 34 since yesterday</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-label">In Remediation</div>
+                        <div class="stat-value">42</div>
+                        <div class="stat-change">→ No change</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Resolved Today</div>
+                        <div class="stat-value">28</div>
+                        <div class="stat-change">↑ 12 more vs yesterday</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Avg Resolution Time</div>
+                        <div class="stat-value">2.4h</div>
+                        <div class="stat-change">↓ 0.5h improvement</div>
+                    </div>
+                </div>
+
+                <div class="two-column-grid">
+                    <div class="chart-container">
+                        <div class="chart-title">Alert Severity Distribution</div>
+                        <div class="chart-wrapper">
+                            <canvas id="analystSeverityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Remediation Status</div>
+                        <div class="chart-wrapper">
+                            <canvas id="analystStatusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Daily Alert Volume & Resolution Rate</div>
+                    <div class="chart-wrapper">
+                        <canvas id="analystTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANALYST ALERTS -->
+            <div id="analyst-alerts" class="section">
+                <div class="header">
+                    <h1>Active Alerts</h1>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-title">Current Alert Queue (156 total)</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Alert ID</th>
+                                <th>Severity</th>
+                                <th>Type</th>
+                                <th>User</th>
+                                <th>Destination</th>
+                                <th>Time</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#DLP-195820</td>
+                                <td><span class="status-badge danger" style="background: #fee2e2; color: #991b1b;">High</span></td>
+                                <td>Email Exfiltration</td>
+                                <td>john.doe@company.com</td>
+                                <td>personal.email@gmail.com</td>
+                                <td>5 min ago</td>
+                                <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DLP-182401</td>
+                                <td><span class="status-badge warning" style="background: #fef3c7; color: #92400e;">Medium</span></td>
+                                <td>File Upload</td>
+                                <td>sarah.smith@company.com</td>
+                                <td>dropbox.com</td>
+                                <td>12 min ago</td>
+                                <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DLP-175737</td>
+                                <td><span class="status-badge success" style="background: #dcfce7; color: #166534;">Low</span></td>
+                                <td>USB Transfer</td>
+                                <td>mike.johnson@company.com</td>
+                                <td>Removable Media</td>
+                                <td>23 min ago</td>
+                                <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DLP-168934</td>
+                                <td><span class="status-badge danger" style="background: #fee2e2; color: #991b1b;">High</span></td>
+                                <td>Print Job</td>
+                                <td>emily.williams@company.com</td>
+                                <td>Network Printer</td>
+                                <td>35 min ago</td>
+                                <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ANALYST REMEDIATION -->
+            <div id="analyst-remediation" class="section">
+                <div class="header">
+                    <h1>Remediation Queue</h1>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-title">In-Progress Remediations (42 active)</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Alert</th>
+                                <th>Assigned To</th>
+                                <th>Status</th>
+                                <th>Started</th>
+                                <th>Expected Close</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#TICKET-2341</td>
+                                <td>#DLP-195820</td>
+                                <td>John Analyst</td>
+                                <td><span class="status-badge status-in-progress">In Progress</span></td>
+                                <td>2 hours ago</td>
+                                <td>4 hours</td>
+                            </tr>
+                            <tr>
+                                <td>#TICKET-2340</td>
+                                <td>#DLP-182401</td>
+                                <td>Sarah Analyst</td>
+                                <td><span class="status-badge status-in-progress">In Progress</span></td>
+                                <td>1 hour ago</td>
+                                <td>3 hours</td>
+                            </tr>
+                            <tr>
+                                <td>#TICKET-2339</td>
+                                <td>#DLP-175737</td>
+                                <td>Mike Analyst</td>
+                                <td><span class="status-badge status-pending">Pending Review</span></td>
+                                <td>30 minutes ago</td>
+                                <td>2 hours</td>
+                            </tr>
+                            <tr>
+                                <td>#TICKET-2338</td>
+                                <td>#DLP-168934</td>
+                                <td>Emily Analyst</td>
+                                <td><span class="status-badge status-completed">Completed</span></td>
+                                <td>4 hours ago</td>
+                                <td>Completed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ANALYST STATS -->
+            <div id="analyst-stats" class="section">
+                <div class="header">
+                    <h1>Performance Statistics</h1>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card success">
+                        <div class="stat-label">Accuracy Rate</div>
+                        <div class="stat-value">96.2%</div>
+                        <div class="stat-change">↑ 1.2% vs last month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Alerts Resolved</div>
+                        <div class="stat-value">1,245</div>
+                        <div class="stat-change">This month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">False Positive Rate</div>
+                        <div class="stat-value">3.8%</div>
+                        <div class="stat-change">↓ 0.5% improvement</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Team Efficiency</div>
+                        <div class="stat-value">98%</div>
+                        <div class="stat-change">↑ 2% vs last week</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Individual Performance (Last 30 Days)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="analystPerformanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXECUTIVE DASHBOARD -->
+            <div id="exec-overview" class="section">
+                <div class="header">
+                    <h1>Executive Dashboard</h1>
+                    <div class="header-actions">
+                        <button class="btn-primary" onclick="refreshDashboard()">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card danger">
+                        <div class="stat-label">Total Issues</div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-change negative">↑ 34 this week</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-label">In Remediation</div>
+                        <div class="stat-value">42</div>
+                        <div class="stat-change">9 hours avg</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Resolved This Week</div>
+                        <div class="stat-value">187</div>
+                        <div class="stat-change">↑ 23% vs last week</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Compliance Score</div>
+                        <div class="stat-value">94%</div>
+                        <div class="stat-change">↑ 2% improvement</div>
+                    </div>
+                </div>
+
+                <div class="two-column-grid">
+                    <div class="chart-container">
+                        <div class="chart-title">Issue Status Overview</div>
+                        <div class="chart-wrapper">
+                            <canvas id="execStatusChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Remediation Progress</div>
+                        <div class="chart-wrapper">
+                            <canvas id="execProgressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Weekly Trend - Issues vs Resolution</div>
+                    <div class="chart-wrapper">
+                        <canvas id="execTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXECUTIVE TRENDS -->
+            <div id="exec-trends" class="section">
+                <div class="header">
+                    <h1>Trends & Analytics</h1>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card success">
+                        <div class="stat-label">MTTR (Mean Time to Resolve)</div>
+                        <div class="stat-value">8.2h</div>
+                        <div class="stat-change">↓ 1.5h improvement</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Auto-Resolution Rate</div>
+                        <div class="stat-value">65.3%</div>
+                        <div class="stat-change">↑ 8.2% vs last month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">High-Risk Alerts</div>
+                        <div class="stat-value">23</div>
+                        <div class="stat-change">88.6% detection rate</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-label">Cost Savings (Est.)</div>
+                        <div class="stat-value">$47.2K</div>
+                        <div class="stat-change">This quarter</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">30-Day Incident Trend</div>
+                    <div class="chart-wrapper">
+                        <canvas id="exec30DayChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">Alert Type Distribution</div>
+                    <div class="chart-wrapper">
+                        <canvas id="execAlertTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXECUTIVE REPORTS -->
+            <div id="exec-reports" class="section">
+                <div class="header">
+                    <h1>Compliance Reports</h1>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-title">Compliance Status by Department</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Department</th>
+                                <th>Issues Found</th>
+                                <th>Resolved</th>
+                                <th>In Progress</th>
+                                <th>Compliance Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Finance</td>
+                                <td>34</td>
+                                <td>28</td>
+                                <td>6</td>
+                                <td>97%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
+                            </tr>
+                            <tr>
+                                <td>Engineering</td>
+                                <td>52</td>
+                                <td>45</td>
+                                <td>7</td>
+                                <td>95%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
+                            </tr>
+                            <tr>
+                                <td>Sales & Marketing</td>
+                                <td>28</td>
+                                <td>22</td>
+                                <td>6</td>
+                                <td>91%</td>
+                                <td><span class="status-badge status-pending">At Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>HR & Legal</td>
+                                <td>19</td>
+                                <td>18</td>
+                                <td>1</td>
+                                <td>98%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
+                            </tr>
+                            <tr>
+                                <td>Operations</td>
+                                <td>23</td>
+                                <td>19</td>
+                                <td>4</td>
+                                <td>94%</td>
+                                <td><span class="status-badge status-pending">At Risk</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'admin';
+        let charts = {};
+
+        function selectRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.role-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function login() {
+            const roleNames = {
+                admin: 'Administrator',
+                analyst: 'Security Analyst',
+                executive: 'Executive Lead'
+            };
+
+            const userNames = {
+                admin: 'Admin User',
+                analyst: 'John Analyst',
+                executive: 'Chief Security Officer'
+            };
+
+            document.getElementById('userName').textContent = userNames[currentRole];
+            document.getElementById('userRole').textContent = roleNames[currentRole];
+
+            document.getElementById('loginContainer').classList.remove('show');
+            document.getElementById('mainContainer').classList.add('show');
+
+            // Show appropriate default section
+            if (currentRole === 'admin') showSection('admin-overview');
+            else if (currentRole === 'analyst') showSection('analyst-overview');
+            else showSection('exec-overview');
+
+            initializeCharts();
+        }
+
+        function logout() {
+            document.getElementById('mainContainer').classList.remove('show');
+            document.getElementById('loginContainer').classList.add('show');
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            Object.values(charts).forEach(chart => chart.destroy());
+            charts = {};
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+
+            setTimeout(() => {
+                Object.keys(charts).forEach(key => {
+                    if (charts[key]) charts[key].resize();
+                });
+            }, 100);
+        }
+
+        function initializeCharts() {
+            const chartConfig = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: { size: 12, family: 'Arial, sans-serif' },
+                            color: '#64748b'
+                        }
+                    }
+                }
+            };
+
+            // Admin Performance Chart
+            const adminPerfCtx = document.getElementById('adminPerformanceChart');
+            if (adminPerfCtx) {
+                charts['adminPerf'] = new Chart(adminPerfCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['12 AM', '4 AM', '8 AM', '12 PM', '4 PM', '8 PM', '12 AM'],
+                        datasets: [{
+                            label: 'CPU Usage (%)',
+                            data: [35, 28, 52, 68, 72, 65, 45],
+                            borderColor: '#1e40af',
+                            backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Memory Usage (%)',
+                            data: [45, 42, 58, 71, 78, 73, 55],
+                            borderColor: '#0f766e',
+                            backgroundColor: 'rgba(15, 118, 110, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Admin Connection Chart
+            const adminConnCtx = document.getElementById('adminConnectionChart');
+            if (adminConnCtx) {
+                charts['adminConn'] = new Chart(adminConnCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Connected', 'Syncing', 'Offline'],
+                        datasets: [{
+                            data: [5, 1, 0],
+                            backgroundColor: ['#10b981', '#f59e0b', '#dc2626'],
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Admin Health Chart
+            const adminHealthCtx = document.getElementById('adminHealthChart');
+            if (adminHealthCtx) {
+                charts['adminHealth'] = new Chart(adminHealthCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Error Rate (%)',
+                            data: [0.04, 0.03, 0.05, 0.02, 0.02, 0.015, 0.02],
+                            borderColor: '#dc2626',
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Analyst Severity Chart
+            const analystSevCtx = document.getElementById('analystSeverityChart');
+            if (analystSevCtx) {
+                charts['analystSev'] = new Chart(analystSevCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Critical', 'High', 'Medium', 'Low'],
+                        datasets: [{
+                            label: 'Alert Count',
+                            data: [23, 45, 62, 26],
+                            backgroundColor: ['#dc2626', '#f59e0b', '#fbbf24', '#93c5fd']
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Analyst Status Chart
+            const analystStatCtx = document.getElementById('analystStatusChart');
+            if (analystStatCtx) {
+                charts['analystStat'] = new Chart(analystStatCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Resolved', 'In Progress', 'Pending', 'Escalated'],
+                        datasets: [{
+                            data: [28, 42, 68, 18],
+                            backgroundColor: ['#10b981', '#0f766e', '#f59e0b', '#dc2626']
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Analyst Trend Chart
+            const analystTrendCtx = document.getElementById('analystTrendChart');
+            if (analystTrendCtx) {
+                charts['analystTrend'] = new Chart(analystTrendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Alerts Received',
+                            data: [122, 134, 145, 128, 156, 98, 87],
+                            borderColor: '#dc2626',
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Alerts Resolved',
+                            data: [98, 112, 125, 115, 130, 92, 76],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Analyst Performance Chart
+            const analystPerfCtx = document.getElementById('analystPerformanceChart');
+            if (analystPerfCtx) {
+                charts['analystPerf'] = new Chart(analystPerfCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['John', 'Sarah', 'Mike', 'Emily'],
+                        datasets: [{
+                            label: 'Resolved',
+                            data: [34, 28, 31, 26],
+                            backgroundColor: '#10b981'
+                        }, {
+                            label: 'Avg Time (h)',
+                            data: [2.1, 2.3, 2.0, 2.8],
+                            backgroundColor: '#0f766e'
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Executive Status Chart
+            const execStatCtx = document.getElementById('execStatusChart');
+            if (execStatCtx) {
+                charts['execStat'] = new Chart(execStatCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Resolved', 'In Remediation', 'Pending'],
+                        datasets: [{
+                            data: [187, 42, 156],
+                            backgroundColor: ['#10b981', '#0f766e', '#dc2626']
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Executive Progress Chart
+            const execProgCtx = document.getElementById('execProgressChart');
+            if (execProgCtx) {
+                charts['execProg'] = new Chart(execProgCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                        datasets: [{
+                            label: 'Issues Found',
+                            data: [28, 32, 24, 35, 37],
+                            backgroundColor: '#dc2626'
+                        }, {
+                            label: 'Issues Resolved',
+                            data: [22, 28, 20, 32, 30],
+                            backgroundColor: '#10b981'
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Executive Trend Chart
+            const execTrendCtx = document.getElementById('execTrendChart');
+            if (execTrendCtx) {
+                charts['execTrend'] = new Chart(execTrendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Issues Found',
+                            data: [156, 168, 145, 142],
+                            borderColor: '#dc2626',
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }, {
+                            label: 'Issues Resolved',
+                            data: [140, 158, 135, 150],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Executive 30-Day Chart
+            const exec30DayCtx = document.getElementById('exec30DayChart');
+            if (exec30DayCtx) {
+                charts['exec30Day'] = new Chart(exec30DayCtx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({length: 30}, (_, i) => `Day ${i+1}`),
+                        datasets: [{
+                            label: 'Daily Incidents',
+                            data: [5, 6, 7, 5, 8, 9, 7, 6, 8, 9, 10, 11, 9, 8, 7, 6, 7, 8, 6, 5, 6, 7, 8, 6, 5, 4, 5, 6, 5, 4],
+                            borderColor: '#1e40af',
+                            backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+
+            // Executive Alert Type Chart
+            const execAlertTypeCtx = document.getElementById('execAlertTypeChart');
+            if (execAlertTypeCtx) {
+                charts['execAlertType'] = new Chart(execAlertTypeCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Email', 'Endpoint', 'Network', 'Cloud', 'USB'],
+                        datasets: [{
+                            label: 'Alert Count',
+                            data: [45, 38, 31, 25, 17],
+                            backgroundColor: '#1e40af'
+                        }]
+                    },
+                    options: { ...chartConfig }
+                });
+            }
+        }
+
+        function refreshDashboard() {
+            alert('Dashboard refreshed! (In a real app, this would fetch live data)');
+        }
+    </script>
+</body>
+</html>

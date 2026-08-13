@@ -1,0 +1,790 @@
+{
+  "generated_at": "2026-06-30 17:53:29",
+  "management": {
+    "total_workers": 100,
+    "total_incidents": 100000,
+    "total_high_risk_incidents": 20234,
+    "incidents_today": 494,
+    "high_risk_incidents_today": 111,
+    "incidents_ytd": 74679,
+    "high_risk_incidents_ytd": 15075,
+    "auto_resolved_total": 79766,
+    "auto_resolved_pct": 79.8,
+    "watchlisted_workers": 11,
+    "departing_soon_workers": 5,
+    "as_of": "2026-06-30 17:45"
+  },
+  "daily_trend": [
+    {
+      "date": "2026-06-01",
+      "total": 543,
+      "high_risk": 108
+    },
+    {
+      "date": "2026-06-02",
+      "total": 481,
+      "high_risk": 118
+    },
+    {
+      "date": "2026-06-03",
+      "total": 538,
+      "high_risk": 118
+    },
+    {
+      "date": "2026-06-04",
+      "total": 494,
+      "high_risk": 89
+    },
+    {
+      "date": "2026-06-05",
+      "total": 455,
+      "high_risk": 92
+    },
+    {
+      "date": "2026-06-06",
+      "total": 508,
+      "high_risk": 110
+    },
+    {
+      "date": "2026-06-07",
+      "total": 512,
+      "high_risk": 98
+    },
+    {
+      "date": "2026-06-08",
+      "total": 517,
+      "high_risk": 118
+    },
+    {
+      "date": "2026-06-09",
+      "total": 513,
+      "high_risk": 118
+    },
+    {
+      "date": "2026-06-10",
+      "total": 522,
+      "high_risk": 104
+    },
+    {
+      "date": "2026-06-11",
+      "total": 514,
+      "high_risk": 100
+    },
+    {
+      "date": "2026-06-12",
+      "total": 562,
+      "high_risk": 135
+    },
+    {
+      "date": "2026-06-13",
+      "total": 513,
+      "high_risk": 130
+    },
+    {
+      "date": "2026-06-14",
+      "total": 513,
+      "high_risk": 75
+    },
+    {
+      "date": "2026-06-15",
+      "total": 536,
+      "high_risk": 114
+    },
+    {
+      "date": "2026-06-16",
+      "total": 548,
+      "high_risk": 119
+    },
+    {
+      "date": "2026-06-17",
+      "total": 544,
+      "high_risk": 103
+    },
+    {
+      "date": "2026-06-18",
+      "total": 557,
+      "high_risk": 106
+    },
+    {
+      "date": "2026-06-19",
+      "total": 579,
+      "high_risk": 98
+    },
+    {
+      "date": "2026-06-20",
+      "total": 522,
+      "high_risk": 84
+    },
+    {
+      "date": "2026-06-21",
+      "total": 551,
+      "high_risk": 113
+    },
+    {
+      "date": "2026-06-22",
+      "total": 523,
+      "high_risk": 104
+    },
+    {
+      "date": "2026-06-23",
+      "total": 540,
+      "high_risk": 108
+    },
+    {
+      "date": "2026-06-24",
+      "total": 512,
+      "high_risk": 85
+    },
+    {
+      "date": "2026-06-25",
+      "total": 511,
+      "high_risk": 116
+    },
+    {
+      "date": "2026-06-26",
+      "total": 520,
+      "high_risk": 98
+    },
+    {
+      "date": "2026-06-27",
+      "total": 559,
+      "high_risk": 102
+    },
+    {
+      "date": "2026-06-28",
+      "total": 570,
+      "high_risk": 118
+    },
+    {
+      "date": "2026-06-29",
+      "total": 546,
+      "high_risk": 119
+    },
+    {
+      "date": "2026-06-30",
+      "total": 494,
+      "high_risk": 111
+    }
+  ],
+  "by_department": [
+    {
+      "department": "Engineering",
+      "total": 21521,
+      "high_risk": 7093
+    },
+    {
+      "department": "Customer_Support",
+      "total": 13556,
+      "high_risk": 2147
+    },
+    {
+      "department": "Sales",
+      "total": 11936,
+      "high_risk": 2130
+    },
+    {
+      "department": "Finance",
+      "total": 11867,
+      "high_risk": 1479
+    },
+    {
+      "department": "Legal",
+      "total": 11125,
+      "high_risk": 1555
+    },
+    {
+      "department": "Marketing",
+      "total": 10884,
+      "high_risk": 2092
+    },
+    {
+      "department": "HR",
+      "total": 8895,
+      "high_risk": 2003
+    },
+    {
+      "department": "IT",
+      "total": 6567,
+      "high_risk": 1157
+    },
+    {
+      "department": "Executive",
+      "total": 3649,
+      "high_risk": 578
+    }
+  ],
+  "by_event_type": [
+    {
+      "event_type": "print_job",
+      "total": 12674,
+      "high_risk": 2524
+    },
+    {
+      "event_type": "usb_transfer",
+      "total": 12645,
+      "high_risk": 2639
+    },
+    {
+      "event_type": "clipboard_copy",
+      "total": 12500,
+      "high_risk": 2384
+    },
+    {
+      "event_type": "email_exfil",
+      "total": 12467,
+      "high_risk": 2365
+    },
+    {
+      "event_type": "screen_capture",
+      "total": 12462,
+      "high_risk": 2417
+    },
+    {
+      "event_type": "cloud_upload",
+      "total": 12436,
+      "high_risk": 2456
+    },
+    {
+      "event_type": "web_upload",
+      "total": 12419,
+      "high_risk": 2747
+    },
+    {
+      "event_type": "removable_media",
+      "total": 12397,
+      "high_risk": 2702
+    }
+  ],
+  "analyst": {
+    "review_threshold": 0.5,
+    "queue_size": 25,
+    "total_candidates_above_threshold": 2909,
+    "review_queue": [
+      {
+        "alert_id": "DLP-104631",
+        "user_id": "U-1042",
+        "full_name": "Robin Ramirez",
+        "job_level": "Director",
+        "department": "Legal",
+        "location": "London, UK",
+        "timestamp": "2026-06-30 01:08",
+        "predicted_risk_probability": 0.69,
+        "event_type": "removable_media",
+        "policy_name": "Financial_Records",
+        "destination_category": "pastebin_code_sharing",
+        "destination_reputation_score": 12,
+        "regex_pii_match_count": 22,
+        "payload_size_kb": 28.32,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1581,
+        "user_high_risk_alerts": 359,
+        "user_high_risk_rate": 0.227
+      },
+      {
+        "alert_id": "DLP-121028",
+        "user_id": "U-1079",
+        "full_name": "Emerson Harris",
+        "job_level": "IC3",
+        "department": "Legal",
+        "location": "Dublin, IE",
+        "timestamp": "2026-01-18 20:24",
+        "predicted_risk_probability": 0.677,
+        "event_type": "email_exfil",
+        "policy_name": "Source_Code_Exfil",
+        "destination_category": "unknown_external",
+        "destination_reputation_score": 16,
+        "regex_pii_match_count": 25,
+        "payload_size_kb": 46.97,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 865,
+        "user_high_risk_alerts": 75,
+        "user_high_risk_rate": 0.087
+      },
+      {
+        "alert_id": "DLP-185241",
+        "user_id": "U-1001",
+        "full_name": "Avery Nguyen",
+        "job_level": "Manager",
+        "department": "Legal",
+        "location": "London, UK",
+        "timestamp": "2026-04-11 11:02",
+        "predicted_risk_probability": 0.648,
+        "event_type": "removable_media",
+        "policy_name": "PCI-DSS_CardData",
+        "destination_category": "competitor_domain",
+        "destination_reputation_score": 9,
+        "regex_pii_match_count": 21,
+        "payload_size_kb": 116.4,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1112,
+        "user_high_risk_alerts": 150,
+        "user_high_risk_rate": 0.135
+      },
+      {
+        "alert_id": "DLP-136718",
+        "user_id": "U-1024",
+        "full_name": "Wren Torres",
+        "job_level": "IC2",
+        "department": "Engineering",
+        "location": "London, UK",
+        "timestamp": "2026-06-29 16:42",
+        "predicted_risk_probability": 0.606,
+        "event_type": "web_upload",
+        "policy_name": "HR_Confidential",
+        "destination_category": "webmail",
+        "destination_reputation_score": 53,
+        "regex_pii_match_count": 23,
+        "payload_size_kb": 107.75,
+        "on_watchlist": true,
+        "is_departing_soon": true,
+        "user_total_alerts": 1484,
+        "user_high_risk_alerts": 649,
+        "user_high_risk_rate": 0.437
+      },
+      {
+        "alert_id": "DLP-186963",
+        "user_id": "U-1002",
+        "full_name": "Taylor Hill",
+        "job_level": "Manager",
+        "department": "Marketing",
+        "location": "Chicago, US",
+        "timestamp": "2026-06-30 07:08",
+        "predicted_risk_probability": 0.595,
+        "event_type": "cloud_upload",
+        "policy_name": "Credentials_Leak",
+        "destination_category": "pastebin_code_sharing",
+        "destination_reputation_score": 12,
+        "regex_pii_match_count": 19,
+        "payload_size_kb": 6.65,
+        "on_watchlist": true,
+        "is_departing_soon": true,
+        "user_total_alerts": 1354,
+        "user_high_risk_alerts": 540,
+        "user_high_risk_rate": 0.399
+      },
+      {
+        "alert_id": "DLP-186144",
+        "user_id": "U-1066",
+        "full_name": "Peyton Williams",
+        "job_level": "IC2",
+        "department": "Customer_Support",
+        "location": "London, UK",
+        "timestamp": "2026-06-30 11:26",
+        "predicted_risk_probability": 0.595,
+        "event_type": "screen_capture",
+        "policy_name": "Source_Code_Exfil",
+        "destination_category": "webmail",
+        "destination_reputation_score": 48,
+        "regex_pii_match_count": 25,
+        "payload_size_kb": 14.85,
+        "on_watchlist": true,
+        "is_departing_soon": false,
+        "user_total_alerts": 1712,
+        "user_high_risk_alerts": 869,
+        "user_high_risk_rate": 0.508
+      },
+      {
+        "alert_id": "DLP-167166",
+        "user_id": "U-1039",
+        "full_name": "Shay Ramirez",
+        "job_level": "IC1",
+        "department": "IT",
+        "location": "San Francisco, US",
+        "timestamp": "2026-06-30 13:08",
+        "predicted_risk_probability": 0.588,
+        "event_type": "web_upload",
+        "policy_name": "Healthcare_PHI",
+        "destination_category": "social_media",
+        "destination_reputation_score": 38,
+        "regex_pii_match_count": 29,
+        "payload_size_kb": 21.14,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 945,
+        "user_high_risk_alerts": 85,
+        "user_high_risk_rate": 0.09
+      },
+      {
+        "alert_id": "DLP-179493",
+        "user_id": "U-1023",
+        "full_name": "Robin Martinez",
+        "job_level": "Manager",
+        "department": "Engineering",
+        "location": "Remote",
+        "timestamp": "2026-05-30 03:34",
+        "predicted_risk_probability": 0.588,
+        "event_type": "screen_capture",
+        "policy_name": "Financial_Records",
+        "destination_category": "unknown_external",
+        "destination_reputation_score": 14,
+        "regex_pii_match_count": 27,
+        "payload_size_kb": 17.15,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1160,
+        "user_high_risk_alerts": 156,
+        "user_high_risk_rate": 0.134
+      },
+      {
+        "alert_id": "DLP-140437",
+        "user_id": "U-1093",
+        "full_name": "Cameron Lee",
+        "job_level": "IC3",
+        "department": "Marketing",
+        "location": "London, UK",
+        "timestamp": "2026-06-29 08:57",
+        "predicted_risk_probability": 0.588,
+        "event_type": "web_upload",
+        "policy_name": "Customer_PII",
+        "destination_category": "pastebin_code_sharing",
+        "destination_reputation_score": 8,
+        "regex_pii_match_count": 21,
+        "payload_size_kb": 16.61,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 721,
+        "user_high_risk_alerts": 63,
+        "user_high_risk_rate": 0.087
+      },
+      {
+        "alert_id": "DLP-178586",
+        "user_id": "U-1035",
+        "full_name": "Alex Lewis",
+        "job_level": "IC1",
+        "department": "Marketing",
+        "location": "Sydney, AU",
+        "timestamp": "2026-02-13 05:18",
+        "predicted_risk_probability": 0.586,
+        "event_type": "cloud_upload",
+        "policy_name": "PCI-DSS_CardData",
+        "destination_category": "unknown_external",
+        "destination_reputation_score": 17,
+        "regex_pii_match_count": 21,
+        "payload_size_kb": 24.97,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 586,
+        "user_high_risk_alerts": 33,
+        "user_high_risk_rate": 0.056
+      },
+      {
+        "alert_id": "DLP-169153",
+        "user_id": "U-1077",
+        "full_name": "Val Robinson",
+        "job_level": "IC2",
+        "department": "IT",
+        "location": "New York, US",
+        "timestamp": "2026-06-30 11:48",
+        "predicted_risk_probability": 0.585,
+        "event_type": "email_exfil",
+        "policy_name": "Credentials_Leak",
+        "destination_category": "competitor_domain",
+        "destination_reputation_score": 7,
+        "regex_pii_match_count": 26,
+        "payload_size_kb": 154.5,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1508,
+        "user_high_risk_alerts": 340,
+        "user_high_risk_rate": 0.225
+      },
+      {
+        "alert_id": "DLP-149543",
+        "user_id": "U-1063",
+        "full_name": "Reese Gonzalez",
+        "job_level": "Manager",
+        "department": "Finance",
+        "location": "New York, US",
+        "timestamp": "2026-02-23 16:48",
+        "predicted_risk_probability": 0.571,
+        "event_type": "web_upload",
+        "policy_name": "Customer_PII",
+        "destination_category": "social_media",
+        "destination_reputation_score": 41,
+        "regex_pii_match_count": 15,
+        "payload_size_kb": 203.65,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 908,
+        "user_high_risk_alerts": 83,
+        "user_high_risk_rate": 0.091
+      },
+      {
+        "alert_id": "DLP-109987",
+        "user_id": "U-1082",
+        "full_name": "Rowan Scott",
+        "job_level": "VP",
+        "department": "Marketing",
+        "location": "Chicago, US",
+        "timestamp": "2026-06-29 18:28",
+        "predicted_risk_probability": 0.566,
+        "event_type": "removable_media",
+        "policy_name": "Source_Code_Exfil",
+        "destination_category": "pastebin_code_sharing",
+        "destination_reputation_score": 10,
+        "regex_pii_match_count": 25,
+        "payload_size_kb": 642.35,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1999,
+        "user_high_risk_alerts": 779,
+        "user_high_risk_rate": 0.39
+      },
+      {
+        "alert_id": "DLP-167320",
+        "user_id": "U-1062",
+        "full_name": "Aspen Lopez",
+        "job_level": "IC2",
+        "department": "Marketing",
+        "location": "Sydney, AU",
+        "timestamp": "2026-06-21 03:30",
+        "predicted_risk_probability": 0.565,
+        "event_type": "print_job",
+        "policy_name": "HR_Confidential",
+        "destination_category": "competitor_domain",
+        "destination_reputation_score": 11,
+        "regex_pii_match_count": 21,
+        "payload_size_kb": 46.97,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1332,
+        "user_high_risk_alerts": 215,
+        "user_high_risk_rate": 0.161
+      },
+      {
+        "alert_id": "DLP-107883",
+        "user_id": "U-1071",
+        "full_name": "Casey Harris",
+        "job_level": "IC3",
+        "department": "Engineering",
+        "location": "Sydney, AU",
+        "timestamp": "2026-06-28 00:55",
+        "predicted_risk_probability": 0.565,
+        "event_type": "web_upload",
+        "policy_name": "HR_Confidential",
+        "destination_category": "unknown_external",
+        "destination_reputation_score": 25,
+        "regex_pii_match_count": 3,
+        "payload_size_kb": 168.4,
+        "on_watchlist": true,
+        "is_departing_soon": true,
+        "user_total_alerts": 1078,
+        "user_high_risk_alerts": 348,
+        "user_high_risk_rate": 0.323
+      },
+      {
+        "alert_id": "DLP-186946",
+        "user_id": "U-1019",
+        "full_name": "Reese Lee",
+        "job_level": "Senior",
+        "department": "Customer_Support",
+        "location": "Sydney, AU",
+        "timestamp": "2026-04-23 01:36",
+        "predicted_risk_probability": 0.562,
+        "event_type": "email_exfil",
+        "policy_name": "Healthcare_PHI",
+        "destination_category": "webmail",
+        "destination_reputation_score": 57,
+        "regex_pii_match_count": 25,
+        "payload_size_kb": 34.12,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 737,
+        "user_high_risk_alerts": 61,
+        "user_high_risk_rate": 0.083
+      },
+      {
+        "alert_id": "DLP-166465",
+        "user_id": "U-1068",
+        "full_name": "Noa Wilson",
+        "job_level": "IC1",
+        "department": "Marketing",
+        "location": "Sydney, AU",
+        "timestamp": "2026-05-31 05:04",
+        "predicted_risk_probability": 0.562,
+        "event_type": "usb_transfer",
+        "policy_name": "PII_SSN_Match",
+        "destination_category": "social_media",
+        "destination_reputation_score": 32,
+        "regex_pii_match_count": 21,
+        "payload_size_kb": 781.84,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 749,
+        "user_high_risk_alerts": 55,
+        "user_high_risk_rate": 0.073
+      },
+      {
+        "alert_id": "DLP-152546",
+        "user_id": "U-1018",
+        "full_name": "Jordan Davis",
+        "job_level": "Manager",
+        "department": "Engineering",
+        "location": "London, UK",
+        "timestamp": "2026-06-30 13:13",
+        "predicted_risk_probability": 0.561,
+        "event_type": "web_upload",
+        "policy_name": "Credentials_Leak",
+        "destination_category": "webmail",
+        "destination_reputation_score": 49,
+        "regex_pii_match_count": 26,
+        "payload_size_kb": 26.54,
+        "on_watchlist": true,
+        "is_departing_soon": false,
+        "user_total_alerts": 1798,
+        "user_high_risk_alerts": 978,
+        "user_high_risk_rate": 0.544
+      },
+      {
+        "alert_id": "DLP-183582",
+        "user_id": "U-1045",
+        "full_name": "Zion Lee",
+        "job_level": "Director",
+        "department": "Customer_Support",
+        "location": "Sydney, AU",
+        "timestamp": "2026-03-10 09:15",
+        "predicted_risk_probability": 0.56,
+        "event_type": "usb_transfer",
+        "policy_name": "Financial_Records",
+        "destination_category": "pastebin_code_sharing",
+        "destination_reputation_score": 11,
+        "regex_pii_match_count": 23,
+        "payload_size_kb": 1.14,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 818,
+        "user_high_risk_alerts": 67,
+        "user_high_risk_rate": 0.082
+      },
+      {
+        "alert_id": "DLP-142970",
+        "user_id": "U-1004",
+        "full_name": "Sage Allen",
+        "job_level": "IC2",
+        "department": "Sales",
+        "location": "Toronto, CA",
+        "timestamp": "2026-06-28 06:20",
+        "predicted_risk_probability": 0.557,
+        "event_type": "web_upload",
+        "policy_name": "HR_Confidential",
+        "destination_category": "webmail",
+        "destination_reputation_score": 49,
+        "regex_pii_match_count": 5,
+        "payload_size_kb": 551.89,
+        "on_watchlist": true,
+        "is_departing_soon": false,
+        "user_total_alerts": 1831,
+        "user_high_risk_alerts": 1039,
+        "user_high_risk_rate": 0.567
+      },
+      {
+        "alert_id": "DLP-128378",
+        "user_id": "U-1030",
+        "full_name": "Avery Robinson",
+        "job_level": "Senior",
+        "department": "Engineering",
+        "location": "Remote",
+        "timestamp": "2026-06-30 17:43",
+        "predicted_risk_probability": 0.554,
+        "event_type": "removable_media",
+        "policy_name": "Healthcare_PHI",
+        "destination_category": "unknown_external",
+        "destination_reputation_score": 7,
+        "regex_pii_match_count": 24,
+        "payload_size_kb": 435.23,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1917,
+        "user_high_risk_alerts": 666,
+        "user_high_risk_rate": 0.347
+      },
+      {
+        "alert_id": "DLP-101709",
+        "user_id": "U-1025",
+        "full_name": "Sam Ramirez",
+        "job_level": "IC2",
+        "department": "Sales",
+        "location": "Singapore, SG",
+        "timestamp": "2026-03-14 01:18",
+        "predicted_risk_probability": 0.554,
+        "event_type": "clipboard_copy",
+        "policy_name": "Credentials_Leak",
+        "destination_category": "competitor_domain",
+        "destination_reputation_score": 8,
+        "regex_pii_match_count": 14,
+        "payload_size_kb": 11.2,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 620,
+        "user_high_risk_alerts": 41,
+        "user_high_risk_rate": 0.066
+      },
+      {
+        "alert_id": "DLP-139815",
+        "user_id": "U-1000",
+        "full_name": "Morgan Walker",
+        "job_level": "Manager",
+        "department": "Sales",
+        "location": "Austin, US",
+        "timestamp": "2026-06-25 07:41",
+        "predicted_risk_probability": 0.553,
+        "event_type": "usb_transfer",
+        "policy_name": "HR_Confidential",
+        "destination_category": "competitor_domain",
+        "destination_reputation_score": 6,
+        "regex_pii_match_count": 26,
+        "payload_size_kb": 76.86,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 895,
+        "user_high_risk_alerts": 73,
+        "user_high_risk_rate": 0.082
+      },
+      {
+        "alert_id": "DLP-151655",
+        "user_id": "U-1091",
+        "full_name": "Rowan Clark",
+        "job_level": "IC3",
+        "department": "Legal",
+        "location": "Dublin, IE",
+        "timestamp": "2026-06-22 05:42",
+        "predicted_risk_probability": 0.552,
+        "event_type": "web_upload",
+        "policy_name": "PII_SSN_Match",
+        "destination_category": "webmail",
+        "destination_reputation_score": 45,
+        "regex_pii_match_count": 25,
+        "payload_size_kb": 11.66,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1323,
+        "user_high_risk_alerts": 241,
+        "user_high_risk_rate": 0.182
+      },
+      {
+        "alert_id": "DLP-117463",
+        "user_id": "U-1021",
+        "full_name": "Noa Taylor",
+        "job_level": "Senior",
+        "department": "Executive",
+        "location": "Singapore, SG",
+        "timestamp": "2026-06-30 03:54",
+        "predicted_risk_probability": 0.552,
+        "event_type": "cloud_upload",
+        "policy_name": "Customer_PII",
+        "destination_category": "webmail",
+        "destination_reputation_score": 51,
+        "regex_pii_match_count": 20,
+        "payload_size_kb": 82.53,
+        "on_watchlist": false,
+        "is_departing_soon": false,
+        "user_total_alerts": 1028,
+        "user_high_risk_alerts": 132,
+        "user_high_risk_rate": 0.128
+      }
+    ]
+  }
+}
