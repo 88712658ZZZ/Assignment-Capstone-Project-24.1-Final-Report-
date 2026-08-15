@@ -129,7 +129,7 @@ def test_alerts_reference_valid_users():
 
     assert set(alerts["user_id"].unique()).issubset(set(users["user_id"]))
     # Every one of the 20 users should appear at least once across 500 alerts
-    assert alerts["user_id"].nunique() > 1
+    assert alerts["user_id"].nunique() == len(users)
 
     os.remove("/tmp/_test_users.csv")
 
@@ -151,6 +151,16 @@ def test_alert_risk_concentrates_by_user():
 
 
 def test_build_dashboard_payload_structure():
+    # Requires a trained model + metrics.json (produced by train.py) since
+    # build_dashboard_payload now scores every alert through the real
+    # pipeline rather than reading the label's own source column. Skip
+    # gracefully if train.py hasn't been run yet in this environment.
+    model_path = "models/best_model.joblib"
+    metrics_path = "reports/metrics.json"
+    if not (os.path.exists(model_path) and os.path.exists(metrics_path)):
+        pytest.skip("models/best_model.joblib or reports/metrics.json not "
+                     "present -- run src/train.py first")
+
     users = generate_users(n=15, seed=5)
     users.to_csv("/tmp/_test_users3.csv", index=False)
     alerts = generate_dataset(n=2000, seed=5, users_path="/tmp/_test_users3.csv")
@@ -158,6 +168,7 @@ def test_build_dashboard_payload_structure():
 
     payload = build_dashboard_payload(
         "/tmp/_test_alerts3.csv", "/tmp/_test_users3.csv",
+        model_path, metrics_path,
         review_queue_size=10, review_threshold=0.5,
     )
 
@@ -169,7 +180,7 @@ def test_build_dashboard_payload_structure():
     assert len(payload["analyst"]["review_queue"]) <= 10
     if payload["analyst"]["review_queue"]:
         row = payload["analyst"]["review_queue"][0]
-        assert row["predicted_risk_probability"] >= 0.5
+        assert row["model_probability"] >= 0.5
         assert "full_name" in row
 
     os.remove("/tmp/_test_users3.csv")

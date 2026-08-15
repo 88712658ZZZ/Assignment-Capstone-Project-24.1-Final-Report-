@@ -13,11 +13,20 @@ Class imbalance is addressed two ways, selectable via --imbalance-strategy:
     - "class_weight": use class_weight='balanced' (no resampling)
     - "smote": oversample the training set with SMOTE before fitting
 
-Saves the best-performing model (by PR-AUC on the held-out test set) to
-models/best_model.joblib and a full metrics report to reports/metrics.json.
+Saves the best-performing model to models/best_model.joblib and a full
+metrics report to reports/metrics.json. "Best" is chosen under a recall
+floor on the high-risk class (missing a real threat is far more costly
+than an extra escalation), not raw PR-AUC -- see the selection logic in
+main() for details.
+
+NOTE: the model/threshold selection below uses the same held-out test
+set that is also reported as the final evaluation metrics. There is no
+separate validation split. Metrics for the selected model and threshold
+should be read as optimistic in-sample estimates, not as an unbiased
+estimate of production performance.
 
 Usage:
-    python src/train.py --data data/raw/dlp_alerts.csv --imbalance-strategy smote
+    python src/train.py --data data/raw/dlp_alerts.csv --imbalance-strategy class_weight
 """
 
 import argparse
@@ -51,7 +60,12 @@ except ImportError:
 try:
     from xgboost import XGBClassifier
     HAS_XGBOOST = True
-except ImportError:
+except Exception:
+    # Catches ImportError (package not installed) AND runtime import
+    # failures such as XGBoostError (subclasses ValueError, not
+    # ImportError) -- e.g. the xgboost wheel is present but the OpenMP
+    # runtime it needs is missing, which is the default state on macOS.
+    # Either way, we want to skip the model, not crash the whole script.
     HAS_XGBOOST = False
 
 
@@ -146,7 +160,7 @@ def evaluate_model(name, model, X_test_transformed, y_test):
 def main():
     parser = argparse.ArgumentParser(description="Train DLP alert risk classifiers.")
     parser.add_argument("--data", type=str, default="data/raw/dlp_alerts.csv")
-    parser.add_argument("--imbalance-strategy", type=str, default="smote",
+    parser.add_argument("--imbalance-strategy", type=str, default="class_weight",
                          choices=["smote", "class_weight"])
     parser.add_argument("--test-size", type=float, default=0.2)
     parser.add_argument("--random-state", type=int, default=42)
@@ -201,7 +215,25 @@ def main():
               f"(@P>={metrics['auto_resolve_precision_target']})")
 
     print("[5/5] Saving best model and report ...")
-    best_name = max(results, key=lambda n: results[n]["pr_auc"])
+    # Model selection respects the project's stated cost model (a missed
+    # real threat is far more expensive than an unnecessary escalation),
+    # not just raw PR-AUC. A model that nominally edges out PR-AUC by
+    # trading away recall on the high-risk class is not actually better
+    # for this use case -- it lets more real threats slip through.
+    #
+    # Rule: among models that clear a minimum recall floor on the
+    # high-risk class, pick the one with the highest auto-resolved
+    # volume (the actual business KPI). If nothing clears the floor,
+    # fall back to the model with the highest recall so we never
+    # silently pick something below the floor.
+    RECALL_FLOOR = 0.85
+    eligible = {n: r for n, r in results.items() if r["recall_high_risk"] >= RECALL_FLOOR}
+    if eligible:
+        best_name = max(eligible, key=lambda n: eligible[n]["auto_resolved_volume_pct"])
+    else:
+        print(f"      [warn] no model reached the {RECALL_FLOOR} recall floor on "
+              f"high-risk alerts -- falling back to highest-recall model")
+        best_name = max(results, key=lambda n: results[n]["recall_high_risk"])
     best_pipeline = Pipeline(steps=[
         ("preprocessor", preprocessor),
         ("classifier", fitted_models[best_name]),

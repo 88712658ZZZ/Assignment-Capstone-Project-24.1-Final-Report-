@@ -272,8 +272,9 @@
       </div>
       <div class="panel">
         <h2>Auto-resolve performance</h2>
+        <div id="resolve-model-caption" style="font-size:11.5px;color:var(--text-faint);margin:-6px 0 8px;"></div>
         <div class="chart-wrap" id="resolve-chart-wrap" style="height: 220px;">
-          <canvas id="resolveChart" role="img" aria-label="Donut chart showing percentage of incidents auto-resolved versus escalated to analysts"></canvas>
+          <canvas id="resolveChart" role="img" aria-label="Donut chart showing percentage of incidents auto-resolved versus escalated to analysts, based on the trained model's decision at its measured operating threshold"></canvas>
         </div>
       </div>
     </div>
@@ -386,6 +387,13 @@ function renderManagementKpis() {
   document.getElementById('kpi-total').textContent = fmt(m.total_incidents);
   document.getElementById('kpi-total-sub').textContent =
     pct(m.auto_resolved_pct) + ' auto-resolved (' + fmt(m.auto_resolved_total) + ')';
+
+  const capEl = document.getElementById('resolve-model-caption');
+  if (capEl) {
+    capEl.textContent = 'Model: ' + m.model_name + ' · threshold ' + m.model_auto_resolve_threshold +
+      ' · measured @ ' + pct(m.auto_resolve_precision_target * 100) + ' precision floor' +
+      ' · ground-truth low-risk share: ' + pct(m.ground_truth_low_risk_pct) + ' (shown for comparison only)';
+  }
 
   document.getElementById('kpi-today').textContent = fmt(m.incidents_today);
   document.getElementById('kpi-today-sub').textContent =
@@ -533,7 +541,7 @@ function renderQueue() {
   emptyState.style.display = 'none';
 
   tbody.innerHTML = a.review_queue.map((row, idx) => {
-    const probPct = Math.round(row.predicted_risk_probability * 100);
+    const probPct = Math.round(row.model_probability * 100);
     const flags = [];
     if (row.on_watchlist) flags.push('<span class="badge watch">Watchlist</span>');
     if (row.is_departing_soon) flags.push('<span class="badge depart">Departing</span>');
@@ -561,7 +569,7 @@ function openDrawer(row) {
   document.getElementById('d-role').textContent = row.job_level + ' \u00b7 ' + row.department.replace(/_/g, ' ') + ' \u00b7 ' + row.location;
   document.getElementById('d-alertid').textContent = row.alert_id;
   document.getElementById('d-ts').textContent = row.timestamp;
-  document.getElementById('d-prob').textContent = Math.round(row.predicted_risk_probability * 100) + '%';
+  document.getElementById('d-prob').textContent = Math.round(row.model_probability * 100) + '%';
   document.getElementById('d-event').textContent = row.event_type.replace(/_/g, ' ');
   document.getElementById('d-policy').textContent = row.policy_name.replace(/_/g, ' ');
   document.getElementById('d-dest').textContent = row.destination_category.replace(/_/g, ' ');

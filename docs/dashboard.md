@@ -40,14 +40,23 @@ Organization-wide KPIs for leadership/SOC management:
 - **Incidents today** — alerts fired on the most recent date in the dataset, with the high-risk subset.
 - **Incidents year-to-date** — alerts since January 1 of the current year, with the high-risk subset.
 - **Daily incident volume (30-day trend)** — line chart of total vs. high-risk alerts per day, for spotting spikes.
-- **Auto-resolve performance** — donut chart of the auto-resolved vs. escalated split, the project's core efficiency metric.
+- **Auto-resolve performance** — donut chart of the auto-resolved vs. escalated split, computed from the trained model's actual decision at its measured operating threshold (`models/best_model.joblib`, threshold from `reports/metrics.json`) — not the raw ground-truth class balance. This is the project's core efficiency metric.
 - **Incidents by department / event type** — horizontal bar breakdowns, each bar split into auto-resolved (blue) vs. high-risk (red) segments.
 
 ### Analyst view — manual review queue
 
-A ranked queue of users whose most recent alert exceeds the review
-threshold (`predicted_risk_probability >= 0.5` by default), one row per
-user, sorted by risk probability descending. For each row:
+A ranked queue of users whose most recent alert the trained model
+actually scored above its measured auto-resolve threshold
+(`model_probability >= threshold`, where `threshold` defaults to the
+value in `reports/metrics.json` for the selected model — 0.33 for the
+current Logistic Regression), one row per user, sorted by the model's
+own predicted probability descending. **This is a genuine model
+prediction, computed by scoring every alert through
+`models/best_model.joblib`** — earlier versions of this script ranked
+the queue by `predicted_risk_probability`, a column that is the noisy
+latent score the ground-truth label is itself thresholded from, which
+made the queue trivially "perfect" rather than reflecting what the
+model actually learned. For each row:
 
 - User identity, department, role, and recent flagged alert details (event type, timestamp).
 - A visual risk-probability bar and percentage.
@@ -72,14 +81,18 @@ python src/build_dashboard_data.py \
   --review-queue-size 25
 ```
 
-- `--review-threshold` — minimum `predicted_risk_probability` for an alert to be considered "queue-worthy." Raise it to show only the most urgent cases; lower it to widen the queue.
+- `--review-threshold` — minimum real model probability (`model_probability`) for an alert to be considered "queue-worthy." Defaults to the model's own measured auto-resolve threshold from `reports/metrics.json` if not set. Raise it to show only the most urgent cases; lower it to widen the queue.
 - `--review-queue-size` — maximum number of users shown in the queue (one row per user, their single most recent qualifying alert).
 
 ## Customizing for real data
 
 To point this dashboard at real DLP alert exports instead of the
 synthetic dataset, your CSV needs to provide (at minimum) the same
-columns documented in `docs/data_dictionary.md`, particularly `user_id`,
-`timestamp`, `is_high_risk` (or a thresholded version of your model's
-output), and `predicted_risk_probability`. Then re-run
+columns documented in `docs/data_dictionary.md`, particularly `user_id`
+and `timestamp`, plus every feature column `src/preprocessing.py`
+expects. You'll also need a model trained on that schema at
+`models/best_model.joblib` and its `reports/metrics.json` -- the
+dashboard scores each alert through the pipeline itself rather than
+reading a precomputed probability column, so there is no
+`predicted_risk_probability`-equivalent field to supply. Then re-run
 `build_dashboard_data.py` against your file paths.

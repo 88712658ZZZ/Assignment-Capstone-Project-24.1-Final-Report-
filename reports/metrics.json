@@ -25,7 +25,7 @@
       "auto_resolve_threshold": 0.33,
       "auto_resolved_volume_pct": 65.3,
       "auto_resolve_precision_target": 0.98,
-      "train_time_sec": 0.29
+      "train_time_sec": 0.57
     },
     "random_forest": {
       "precision_high_risk": 0.6191,
@@ -48,7 +48,30 @@
       "auto_resolve_threshold": 0.39,
       "auto_resolved_volume_pct": 63.2,
       "auto_resolve_precision_target": 0.98,
-      "train_time_sec": 19.1
+      "train_time_sec": 9.99
+    },
+    "xgboost": {
+      "precision_high_risk": 0.8026,
+      "recall_high_risk": 0.7213,
+      "f1_high_risk": 0.7598,
+      "precision_low_risk": 0.9311,
+      "recall_low_risk": 0.955,
+      "roc_auc": 0.9536,
+      "pr_auc": 0.8573,
+      "confusion_matrix": [
+        [
+          15235,
+          718
+        ],
+        [
+          1128,
+          2919
+        ]
+      ],
+      "auto_resolve_threshold": 0.11,
+      "auto_resolved_volume_pct": 65.9,
+      "auto_resolve_precision_target": 0.98,
+      "train_time_sec": 1.63
     }
   }
 }

@@ -12,7 +12,7 @@ to a finished, GitHub-ready repository.
 
 ## Phase 2 — Data ✅
 4. ✅ Build `src/generate_data.py` to synthesize a realistic, anonymized
-   1,000-row DLP alert dataset with the features named in the brief
+   100,000-row DLP alert dataset with the features named in the brief
    (event severity, payload size, destination reputation, regex/PII
    match counts, UEBA violation history).
 5. ✅ Validate data quality: no nulls, correct dtypes, sane value ranges,
@@ -118,7 +118,7 @@ to a finished, GitHub-ready repository.
 43. ✅ Execute every code cell in the notebook in sequence and embed
     real outputs (printed text, dataframe previews, and matplotlib
     figures as inline PNGs) directly into the saved `.ipynb`, so it is
-    reviewable without needing to be re-run. Confirmed 16/16 code
+    reviewable without needing to be re-run. Confirmed 25/25 code
     cells executed with zero errors and that key numbers (confusion
     matrix, PR-AUC, auto-resolve volume) match `reports/metrics.json`
     exactly.

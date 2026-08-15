@@ -621,6 +621,9 @@
                         <button class="btn-primary" onclick="refreshDashboard()">Refresh</button>
                     </div>
                 </div>
+                <div style="font-size:12.5px;color:#64748b;background:#f1f5f9;border-radius:8px;padding:8px 12px;margin-bottom:16px;">
+                    ℹ️ This project's dataset and trained model don't include live tool-integration telemetry (uptime, sync lag, connector status). Those figures below are illustrative of a production deployment. Alert-volume and model-performance figures throughout the Analyst and Executive views are computed from the actual 100,000-alert dataset and the trained <code>logistic_regression</code> model in <code>models/best_model.joblib</code>.
+                </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -790,8 +793,8 @@
                     </div>
                     <div class="stat-card">
                         <div class="stat-label">Data Processed</div>
-                        <div class="stat-value">2.3M</div>
-                        <div class="stat-change">↑ 150K since yesterday</div>
+                        <div class="stat-value">100,000</div>
+                        <div class="stat-change">Alerts in the training dataset</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-label">Active Sessions</div>
@@ -879,23 +882,23 @@
                 <div class="stats-grid">
                     <div class="stat-card danger">
                         <div class="stat-label">Active Alerts</div>
-                        <div class="stat-value">156</div>
-                        <div class="stat-change negative">↑ 34 since yesterday</div>
+                        <div class="stat-value">185</div>
+                        <div class="stat-change negative">Escalated by the model today</div>
                     </div>
                     <div class="stat-card warning">
                         <div class="stat-label">In Remediation</div>
-                        <div class="stat-value">42</div>
-                        <div class="stat-change">→ No change</div>
+                        <div class="stat-value">111</div>
+                        <div class="stat-change">Illustrative split of today's escalations — this dataset has no ticket/workflow-state field</div>
                     </div>
                     <div class="stat-card success">
-                        <div class="stat-label">Resolved Today</div>
-                        <div class="stat-value">28</div>
-                        <div class="stat-change">↑ 12 more vs yesterday</div>
+                        <div class="stat-label">Auto-Resolved Today</div>
+                        <div class="stat-value">309</div>
+                        <div class="stat-change">By the model, no analyst needed</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-label">Avg Resolution Time</div>
                         <div class="stat-value">2.4h</div>
-                        <div class="stat-change">↓ 0.5h improvement</div>
+                        <div class="stat-change">Illustrative — not tracked in this dataset</div>
                     </div>
                 </div>
 
@@ -929,12 +932,13 @@
                 </div>
 
                 <div class="table-container">
-                    <div class="table-title">Current Alert Queue (156 total)</div>
+                    <div class="table-title">Current Alert Queue (185 total — model-escalated today)</div>
+                    <div style="font-size:11.5px;color:#64748b;margin:-6px 0 10px;">Top rows ranked by the trained model's real predicted probability, pulled from the actual dataset via <code>src/build_dashboard_data.py</code>.</div>
                     <table>
                         <thead>
                             <tr>
                                 <th>Alert ID</th>
-                                <th>Severity</th>
+                                <th>Model Probability</th>
                                 <th>Type</th>
                                 <th>User</th>
                                 <th>Destination</th>
@@ -944,39 +948,39 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>#DLP-195820</td>
-                                <td><span class="status-badge danger" style="background: #fee2e2; color: #991b1b;">High</span></td>
-                                <td>Email Exfiltration</td>
-                                <td>john.doe@company.com</td>
-                                <td>personal.email@gmail.com</td>
-                                <td>5 min ago</td>
-                                <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
-                            </tr>
-                            <tr>
-                                <td>#DLP-182401</td>
-                                <td><span class="status-badge warning" style="background: #fef3c7; color: #92400e;">Medium</span></td>
-                                <td>File Upload</td>
-                                <td>sarah.smith@company.com</td>
-                                <td>dropbox.com</td>
-                                <td>12 min ago</td>
-                                <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
-                            </tr>
-                            <tr>
-                                <td>#DLP-175737</td>
-                                <td><span class="status-badge success" style="background: #dcfce7; color: #166534;">Low</span></td>
-                                <td>USB Transfer</td>
-                                <td>mike.johnson@company.com</td>
+                                <td>#DLP-128378</td>
+                                <td><span class="status-badge danger" style="background: #fee2e2; color: #991b1b;">100%</span></td>
                                 <td>Removable Media</td>
-                                <td>23 min ago</td>
+                                <td>Avery Robinson (Engineering)</td>
+                                <td>Unknown External</td>
+                                <td>2026-06-30 17:43</td>
                                 <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
                             </tr>
                             <tr>
-                                <td>#DLP-168934</td>
-                                <td><span class="status-badge danger" style="background: #fee2e2; color: #991b1b;">High</span></td>
-                                <td>Print Job</td>
-                                <td>emily.williams@company.com</td>
-                                <td>Network Printer</td>
-                                <td>35 min ago</td>
+                                <td>#DLP-103728</td>
+                                <td><span class="status-badge danger" style="background: #fee2e2; color: #991b1b;">100%</span></td>
+                                <td>Email Exfiltration</td>
+                                <td>Casey Harris (Engineering)</td>
+                                <td>Social Media</td>
+                                <td>2026-06-30 17:31</td>
+                                <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DLP-199511</td>
+                                <td><span class="status-badge danger" style="background: #fee2e2; color: #991b1b;">99%</span></td>
+                                <td>Email Exfiltration</td>
+                                <td>Wren Torres (Engineering)</td>
+                                <td>Social Media</td>
+                                <td>2026-06-30 17:13</td>
+                                <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DLP-159153</td>
+                                <td><span class="status-badge danger" style="background: #fee2e2; color: #991b1b;">99%</span></td>
+                                <td>Clipboard Copy</td>
+                                <td>Sage Taylor (Finance)</td>
+                                <td>Unknown External</td>
+                                <td>2026-06-30 01:28</td>
                                 <td><button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Review</button></td>
                             </tr>
                         </tbody>
@@ -991,7 +995,8 @@
                 </div>
 
                 <div class="table-container">
-                    <div class="table-title">In-Progress Remediations (42 active)</div>
+                    <div class="table-title">In-Progress Remediations (111 illustrative)</div>
+                    <div style="font-size:11.5px;color:#64748b;margin:-6px 0 10px;">Alert IDs are real, model-escalated alerts. Ticket/assignee/status columns are illustrative — this dataset has no ticketing workflow field, so these are not derived from project data.</div>
                     <table>
                         <thead>
                             <tr>
@@ -1006,7 +1011,7 @@
                         <tbody>
                             <tr>
                                 <td>#TICKET-2341</td>
-                                <td>#DLP-195820</td>
+                                <td>#DLP-128378</td>
                                 <td>John Analyst</td>
                                 <td><span class="status-badge status-in-progress">In Progress</span></td>
                                 <td>2 hours ago</td>
@@ -1014,7 +1019,7 @@
                             </tr>
                             <tr>
                                 <td>#TICKET-2340</td>
-                                <td>#DLP-182401</td>
+                                <td>#DLP-103728</td>
                                 <td>Sarah Analyst</td>
                                 <td><span class="status-badge status-in-progress">In Progress</span></td>
                                 <td>1 hour ago</td>
@@ -1022,7 +1027,7 @@
                             </tr>
                             <tr>
                                 <td>#TICKET-2339</td>
-                                <td>#DLP-175737</td>
+                                <td>#DLP-199511</td>
                                 <td>Mike Analyst</td>
                                 <td><span class="status-badge status-pending">Pending Review</span></td>
                                 <td>30 minutes ago</td>
@@ -1030,7 +1035,7 @@
                             </tr>
                             <tr>
                                 <td>#TICKET-2338</td>
-                                <td>#DLP-168934</td>
+                                <td>#DLP-159153</td>
                                 <td>Emily Analyst</td>
                                 <td><span class="status-badge status-completed">Completed</span></td>
                                 <td>4 hours ago</td>
@@ -1049,24 +1054,24 @@
 
                 <div class="stats-grid">
                     <div class="stat-card success">
-                        <div class="stat-label">Accuracy Rate</div>
-                        <div class="stat-value">96.2%</div>
-                        <div class="stat-change">↑ 1.2% vs last month</div>
+                        <div class="stat-label">Model Precision (Auto-Resolve)</div>
+                        <div class="stat-value">96.8%</div>
+                        <div class="stat-change">Measured on held-out test set</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">Alerts Resolved</div>
-                        <div class="stat-value">1,245</div>
-                        <div class="stat-change">This month</div>
+                        <div class="stat-label">Alerts Escalated to Analysts</div>
+                        <div class="stat-value">5,516</div>
+                        <div class="stat-change">Trailing 30 days</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">False Positive Rate</div>
-                        <div class="stat-value">3.8%</div>
-                        <div class="stat-change">↓ 0.5% improvement</div>
+                        <div class="stat-label">False Positive Rate (Auto-Resolve)</div>
+                        <div class="stat-value">3.2%</div>
+                        <div class="stat-change">Share of auto-resolved alerts that were actually high-risk</div>
                     </div>
                     <div class="stat-card success">
                         <div class="stat-label">Team Efficiency</div>
                         <div class="stat-value">98%</div>
-                        <div class="stat-change">↑ 2% vs last week</div>
+                        <div class="stat-change">Illustrative — not tracked in this dataset</div>
                     </div>
                 </div>
 
@@ -1089,24 +1094,24 @@
 
                 <div class="stats-grid">
                     <div class="stat-card danger">
-                        <div class="stat-label">Total Issues</div>
-                        <div class="stat-value">156</div>
-                        <div class="stat-change negative">↑ 34 this week</div>
+                        <div class="stat-label">Total Issues (Escalated Today)</div>
+                        <div class="stat-value">185</div>
+                        <div class="stat-change negative">Model-escalated, out of 494 alerts today</div>
                     </div>
                     <div class="stat-card warning">
                         <div class="stat-label">In Remediation</div>
-                        <div class="stat-value">42</div>
-                        <div class="stat-change">9 hours avg</div>
+                        <div class="stat-value">111</div>
+                        <div class="stat-change">Illustrative split — no ticket workflow field in this dataset</div>
                     </div>
                     <div class="stat-card success">
-                        <div class="stat-label">Resolved This Week</div>
-                        <div class="stat-value">187</div>
-                        <div class="stat-change">↑ 23% vs last week</div>
+                        <div class="stat-label">Processed This Week</div>
+                        <div class="stat-value">3,712</div>
+                        <div class="stat-change">Auto-resolved + escalated, trailing 7 days</div>
                     </div>
                     <div class="stat-card success">
                         <div class="stat-label">Compliance Score</div>
-                        <div class="stat-value">94%</div>
-                        <div class="stat-change">↑ 2% improvement</div>
+                        <div class="stat-value">79.8%</div>
+                        <div class="stat-change">Share of all-time activity that is inherently low-risk</div>
                     </div>
                 </div>
 
@@ -1143,22 +1148,22 @@
                     <div class="stat-card success">
                         <div class="stat-label">MTTR (Mean Time to Resolve)</div>
                         <div class="stat-value">8.2h</div>
-                        <div class="stat-change">↓ 1.5h improvement</div>
+                        <div class="stat-change">Illustrative — not tracked in this dataset</div>
                     </div>
                     <div class="stat-card success">
                         <div class="stat-label">Auto-Resolution Rate</div>
                         <div class="stat-value">65.3%</div>
-                        <div class="stat-change">↑ 8.2% vs last month</div>
+                        <div class="stat-change">Measured, at the 98% precision floor (reports/metrics.json)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-label">High-Risk Alerts</div>
-                        <div class="stat-value">23</div>
-                        <div class="stat-change">88.6% detection rate</div>
+                        <div class="stat-label">High-Risk Alerts (Today)</div>
+                        <div class="stat-value">111</div>
+                        <div class="stat-change">88.6% model recall on this class</div>
                     </div>
                     <div class="stat-card success">
                         <div class="stat-label">Cost Savings (Est.)</div>
-                        <div class="stat-value">$47.2K</div>
-                        <div class="stat-change">This quarter</div>
+                        <div class="stat-value">$194.7K</div>
+                        <div class="stat-change">This quarter, @ $12/alert avoided manual review — stated assumption, not measured</div>
                     </div>
                 </div>
 
@@ -1185,57 +1190,90 @@
 
                 <div class="table-container">
                     <div class="table-title">Compliance Status by Department</div>
+                    <div style="font-size:11.5px;color:#64748b;margin:-6px 0 10px;">Computed from the full 100,000-alert dataset and the trained model's actual auto-resolve decisions (src/build_dashboard_data.py). Compliance Score = share of the department's activity that is inherently low-risk (ground truth).</div>
                     <table>
                         <thead>
                             <tr>
                                 <th>Department</th>
-                                <th>Issues Found</th>
-                                <th>Resolved</th>
-                                <th>In Progress</th>
+                                <th>High-Risk (Ground Truth)</th>
+                                <th>Auto-Resolved (Model)</th>
+                                <th>Escalated (Model)</th>
                                 <th>Compliance Score</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Finance</td>
-                                <td>34</td>
-                                <td>28</td>
-                                <td>6</td>
-                                <td>97%</td>
-                                <td><span class="status-badge status-active">Compliant</span></td>
-                            </tr>
-                            <tr>
                                 <td>Engineering</td>
-                                <td>52</td>
-                                <td>45</td>
-                                <td>7</td>
-                                <td>95%</td>
-                                <td><span class="status-badge status-active">Compliant</span></td>
-                            </tr>
-                            <tr>
-                                <td>Sales & Marketing</td>
-                                <td>28</td>
-                                <td>22</td>
-                                <td>6</td>
-                                <td>91%</td>
+                                <td>7,093</td>
+                                <td>10,541</td>
+                                <td>10,980</td>
+                                <td>67.0%</td>
                                 <td><span class="status-badge status-pending">At Risk</span></td>
                             </tr>
                             <tr>
-                                <td>HR & Legal</td>
-                                <td>19</td>
-                                <td>18</td>
-                                <td>1</td>
-                                <td>98%</td>
+                                <td>Customer Support</td>
+                                <td>2,147</td>
+                                <td>9,734</td>
+                                <td>3,822</td>
+                                <td>84.2%</td>
                                 <td><span class="status-badge status-active">Compliant</span></td>
                             </tr>
                             <tr>
-                                <td>Operations</td>
-                                <td>23</td>
-                                <td>19</td>
-                                <td>4</td>
-                                <td>94%</td>
+                                <td>Sales</td>
+                                <td>2,130</td>
+                                <td>8,337</td>
+                                <td>3,599</td>
+                                <td>82.2%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
+                            </tr>
+                            <tr>
+                                <td>Finance</td>
+                                <td>1,479</td>
+                                <td>8,882</td>
+                                <td>2,985</td>
+                                <td>87.5%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
+                            </tr>
+                            <tr>
+                                <td>Legal</td>
+                                <td>1,555</td>
+                                <td>7,961</td>
+                                <td>3,164</td>
+                                <td>86.0%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
+                            </tr>
+                            <tr>
+                                <td>Marketing</td>
+                                <td>2,092</td>
+                                <td>7,108</td>
+                                <td>3,776</td>
+                                <td>80.8%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
+                            </tr>
+                            <tr>
+                                <td>HR</td>
+                                <td>2,003</td>
+                                <td>5,576</td>
+                                <td>3,319</td>
+                                <td>77.5%</td>
                                 <td><span class="status-badge status-pending">At Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT</td>
+                                <td>1,157</td>
+                                <td>4,479</td>
+                                <td>2,088</td>
+                                <td>82.4%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
+                            </tr>
+                            <tr>
+                                <td>Executive</td>
+                                <td>578</td>
+                                <td>2,460</td>
+                                <td>1,189</td>
+                                <td>84.2%</td>
+                                <td><span class="status-badge status-active">Compliant</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1381,23 +1419,27 @@
                 });
             }
 
-            // Analyst Severity Chart
+            // Analyst Severity Chart -- real event_severity distribution
+            // across the full 100,000-alert dataset (data/raw/dlp_alerts.csv)
             const analystSevCtx = document.getElementById('analystSeverityChart');
             if (analystSevCtx) {
                 charts['analystSev'] = new Chart(analystSevCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Critical', 'High', 'Medium', 'Low'],
+                        labels: ['Severity 1', 'Severity 2', 'Severity 3', 'Severity 4', 'Severity 5 (Critical)'],
                         datasets: [{
-                            label: 'Alert Count',
-                            data: [23, 45, 62, 26],
-                            backgroundColor: ['#dc2626', '#f59e0b', '#fbbf24', '#93c5fd']
+                            label: 'Alert Count (all-time, n=100,000)',
+                            data: [52768, 33075, 12341, 1728, 88],
+                            backgroundColor: ['#93c5fd', '#fbbf24', '#f59e0b', '#f97316', '#dc2626']
                         }]
                     },
                     options: { ...chartConfig }
                 });
             }
 
+            // Analyst Status Chart -- illustrative ticket-lifecycle split.
+            // This dataset has no remediation-status field, so these
+            // categories cannot be computed from project data.
             // Analyst Status Chart
             const analystStatCtx = document.getElementById('analystStatusChart');
             if (analystStatCtx) {
@@ -1414,22 +1456,23 @@
                 });
             }
 
-            // Analyst Trend Chart
+            // Analyst Trend Chart -- real last-7-days from data/raw/dlp_alerts.csv,
+            // "Alerts Resolved" = the model's actual auto-resolve decisions
             const analystTrendCtx = document.getElementById('analystTrendChart');
             if (analystTrendCtx) {
                 charts['analystTrend'] = new Chart(analystTrendCtx, {
                     type: 'line',
                     data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        labels: ['Jun 24', 'Jun 25', 'Jun 26', 'Jun 27', 'Jun 28', 'Jun 29', 'Jun 30'],
                         datasets: [{
                             label: 'Alerts Received',
-                            data: [122, 134, 145, 128, 156, 98, 87],
+                            data: [512, 511, 520, 559, 570, 546, 494],
                             borderColor: '#dc2626',
                             backgroundColor: 'rgba(220, 38, 38, 0.1)',
                             tension: 0.4
                         }, {
-                            label: 'Alerts Resolved',
-                            data: [98, 112, 125, 115, 130, 92, 76],
+                            label: 'Auto-Resolved (Model)',
+                            data: [339, 332, 343, 369, 370, 350, 309],
                             borderColor: '#10b981',
                             backgroundColor: 'rgba(16, 185, 129, 0.1)',
                             tension: 0.4
@@ -1439,6 +1482,8 @@
                 });
             }
 
+            // Analyst Performance Chart -- illustrative. Alerts are not
+            // attributed to named analysts anywhere in this dataset.
             // Analyst Performance Chart
             const analystPerfCtx = document.getElementById('analystPerformanceChart');
             if (analystPerfCtx) {
@@ -1460,15 +1505,18 @@
                 });
             }
 
-            // Executive Status Chart
+            // Executive Status Chart -- today's real 494 alerts, split by the
+            // model's actual auto-resolve decision (309 auto-resolved / 185
+            // escalated). "In Remediation" / "Pending" further split the
+            // escalated count illustratively (no ticket-state field exists).
             const execStatCtx = document.getElementById('execStatusChart');
             if (execStatCtx) {
                 charts['execStat'] = new Chart(execStatCtx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Resolved', 'In Remediation', 'Pending'],
+                        labels: ['Auto-Resolved (Model)', 'In Remediation (Illustrative)', 'Pending (Illustrative)'],
                         datasets: [{
-                            data: [187, 42, 156],
+                            data: [309, 111, 74],
                             backgroundColor: ['#10b981', '#0f766e', '#dc2626']
                         }]
                     },
@@ -1476,6 +1524,9 @@
                 });
             }
 
+            // Executive Progress Chart -- illustrative daily issues
+            // found/resolved split. No ticket-lifecycle field exists in
+            // this dataset to compute this from.
             // Executive Progress Chart
             const execProgCtx = document.getElementById('execProgressChart');
             if (execProgCtx) {
@@ -1497,6 +1548,8 @@
                 });
             }
 
+            // Executive Trend Chart -- illustrative weekly issues
+            // found/resolved split (same limitation as above).
             // Executive Trend Chart
             const execTrendCtx = document.getElementById('execTrendChart');
             if (execTrendCtx) {
@@ -1524,16 +1577,17 @@
                 });
             }
 
-            // Executive 30-Day Chart
+            // Executive 30-Day Chart -- real daily alert volume, June 1-30,
+            // from data/raw/dlp_alerts.csv (src/build_dashboard_data.py)
             const exec30DayCtx = document.getElementById('exec30DayChart');
             if (exec30DayCtx) {
                 charts['exec30Day'] = new Chart(exec30DayCtx, {
                     type: 'line',
                     data: {
-                        labels: Array.from({length: 30}, (_, i) => `Day ${i+1}`),
+                        labels: Array.from({length: 30}, (_, i) => `Jun ${i+1}`),
                         datasets: [{
                             label: 'Daily Incidents',
-                            data: [5, 6, 7, 5, 8, 9, 7, 6, 8, 9, 10, 11, 9, 8, 7, 6, 7, 8, 6, 5, 6, 7, 8, 6, 5, 4, 5, 6, 5, 4],
+                            data: [543, 481, 538, 494, 455, 508, 512, 517, 513, 522, 514, 562, 513, 513, 536, 548, 544, 557, 579, 522, 551, 523, 540, 512, 511, 520, 559, 570, 546, 494],
                             borderColor: '#1e40af',
                             backgroundColor: 'rgba(30, 64, 175, 0.1)',
                             tension: 0.4,
@@ -1544,16 +1598,17 @@
                 });
             }
 
-            // Executive Alert Type Chart
+            // Executive Alert Type Chart -- real event_type counts, all-time,
+            // from data/raw/dlp_alerts.csv
             const execAlertTypeCtx = document.getElementById('execAlertTypeChart');
             if (execAlertTypeCtx) {
                 charts['execAlertType'] = new Chart(execAlertTypeCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Email', 'Endpoint', 'Network', 'Cloud', 'USB'],
+                        labels: ['Print Job', 'USB Transfer', 'Clipboard Copy', 'Email Exfil', 'Screen Capture', 'Cloud Upload'],
                         datasets: [{
-                            label: 'Alert Count',
-                            data: [45, 38, 31, 25, 17],
+                            label: 'Alert Count (all-time, n=100,000)',
+                            data: [12674, 12645, 12500, 12467, 12462, 12436],
                             backgroundColor: '#1e40af'
                         }]
                     },

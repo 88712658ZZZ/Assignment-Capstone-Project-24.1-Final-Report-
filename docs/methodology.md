@@ -19,7 +19,7 @@ choice below.
 
 Real DLP alert logs contain sensitive operational and behavioral data
 that cannot be published publicly. `src/generate_data.py` generates a
-**1,000-row synthetic dataset** that mirrors the *structure* and
+**100,000-row synthetic dataset** that mirrors the *structure* and
 *statistical relationships* of real DLP/UEBA logs without exposing any
 real organization's data.
 
@@ -35,10 +35,18 @@ Key design choices:
 - The target label is derived from a **weighted composite risk score**
   (destination reputation, PII match density, payload size, violation
   history, severity, watchlist status, file extension risk, classifier
-  confidence) plus injected Gaussian noise, then thresholded. This
-  ensures the dataset has genuine, learnable signal — mirroring how a
-  real analyst's disposition decision would be influenced by these
-  same factors — without being trivially separable.
+  confidence, **and the user's baseline risk propensity, which carries
+  the single largest weight, 0.20**) plus injected Gaussian noise, then
+  thresholded. This ensures the dataset has genuine, learnable signal —
+  mirroring how a real analyst's disposition decision would be
+  influenced by these same factors — without being trivially separable.
+
+  **Limitation:** because this risk score is a linear combination of
+  features plus noise, it structurally favors linear models. Logistic
+  Regression outperforming the ensemble models in this project's results
+  is partly a property of this generator, not necessarily a finding that
+  would generalize to real DLP alert data with more complex, non-linear
+  risk structure.
 
 ## 3. Feature Engineering (`src/preprocessing.py`)
 
@@ -104,7 +112,17 @@ training) accept a `random_state`/`seed` parameter, defaulting to `42`
 throughout, so results are fully reproducible end-to-end via:
 
 ```bash
-python src/generate_data.py --seed 42
-python src/train.py --random-state 42
+python src/generate_users.py --seed 42
+python src/generate_data.py --seed 42 --users data/raw/users.csv
+python src/train.py --random-state 42 --imbalance-strategy class_weight
 python src/evaluate.py --random-state 42
 ```
+
+Note: `train.py` now defaults `--imbalance-strategy` to `class_weight`
+(matching the committed `reports/metrics.json`), so the flag above is
+technically redundant but is included for clarity. Also note that the
+model and its auto-resolve threshold are both selected using the same
+held-out test set that is reported as the final evaluation metrics —
+there is no separate validation split, so these numbers should be read
+as optimistic in-sample estimates rather than an unbiased estimate of
+production performance.

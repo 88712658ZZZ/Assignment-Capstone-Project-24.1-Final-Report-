@@ -26,7 +26,7 @@ to a user from `users.csv`.
 | `is_sanctioned_destination` | binary (0/1) | Whether the destination is an approved/sanctioned business partner. |
 | `hours_since_last_user_alert` | float | Hours elapsed since this user's previous DLP alert (recency signal). |
 | `high_risk_file_extension` | binary (0/1) | Whether the transferred file has a higher-risk extension. |
-| `predicted_risk_probability` | float (0–1) | Continuous model-style risk probability, used by the Analyst dashboard to rank alerts for manual review. |
+| `predicted_risk_probability` | float (0–1) | ⚠️ **Never use as a model feature.** This is the noisy latent score that `is_high_risk` is directly thresholded from at generation time (see `src/generate_data.py`) — it is the label's own source, not a model output. `src/preprocessing.py` excludes it via an explicit `LEAKAGE_COLS` blocklist with a runtime assertion. The dashboard now ranks alerts by a genuine model prediction (`model_probability`, computed by scoring alerts through `models/best_model.joblib`), not by this column — see lines below and `docs/dashboard.md`. |
 | `is_high_risk` | binary (0/1) | **Target label.** `1` = high-risk, should be escalated to a human analyst. `0` = low-risk, safe to auto-resolve. |
 
 ## `users.csv`

@@ -49,6 +49,14 @@ NUMERIC_FEATURES = [
 
 ID_COLS = ["alert_id", "timestamp"]
 
+# Columns that must NEVER be used as model features. predicted_risk_probability
+# is the noisy latent score that is_high_risk is directly thresholded from
+# (see generate_data.py: is_high_risk = risk_score > 0.34, and
+# predicted_risk_probability = round(risk_score, 4) -- same number, rounded).
+# Including it as a feature produces a near-perfect classifier that has
+# learned nothing but the label's own source column.
+LEAKAGE_COLS = ["predicted_risk_probability"]
+
 
 def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     """Add derived features. Operates on a copy; returns a new DataFrame."""
@@ -95,6 +103,14 @@ def load_and_split(csv_path: str, test_size: float = 0.2, random_state: int = 42
     df = engineer_features(df)
 
     feature_cols = CATEGORICAL_FEATURES + NUMERIC_FEATURES + ["payload_size_kb_log"]
+
+    leaked = set(feature_cols) & set(LEAKAGE_COLS)
+    assert not leaked, (
+        f"Refusing to train: {leaked} is a leakage column (the label's own "
+        f"source), not a legitimate feature. Remove it from CATEGORICAL_FEATURES "
+        f"/ NUMERIC_FEATURES before proceeding."
+    )
+
     X = df[feature_cols]
     y = df[TARGET_COL]
 
