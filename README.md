@@ -1,4 +1,5 @@
 # DLP Predictive Modeling — Capstone Project
+by Yev Avidon
 
 Optimizing Data Loss Prevention operations using machine learning to classify security alerts and reduce manual review overhead by **65%**.
 
